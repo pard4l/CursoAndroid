@@ -4,10 +4,14 @@ import org.json.JSONObject;
 
 import treinamento.mobi.rest.RestClient;
 import treinamento.mobi.rest.RestClient.HttpResponseCallback;
-import android.app.Activity;
-import android.app.Fragment;
+import treinamento.mobi.ui.fragments.CoursesListFragment;
+import treinamentos.mobi.db.data.provider.treinamentoContent;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,7 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class MainActivity extends Activity {
+
+public class MainActivity extends FragmentActivity {
 	
 	
 	ProgressDialog progress;
@@ -25,10 +30,10 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
-		}
+//		if (savedInstanceState == null) {
+//			getFragmentManager().beginTransaction()
+//					.replace(R.id.container, new CoursesListFragment()).commit();
+//		}
 //		
 //		ContentResolver cp = getContentResolver();
 //		ContentValues values = new ContentValues();
@@ -57,19 +62,18 @@ public class MainActivity extends Activity {
 //		String val[] = { "1" };
 		
 		//cp.delete(treinamentoContent.Person.CONTENT_URI, where, val);
-		
 		//http://treinamentos.mobi/api/v1/course/?api_key=special-key
+	
 		
+//		progress = new ProgressDialog(MainActivity.this);
+//		progress.setMessage("Carregando");
+//		progress.show();
 		
-		progress = new ProgressDialog(MainActivity.this);
-		progress.setMessage("Carregando");
-		progress.show();
+		Fragment go = CoursesListFragment
+				.newInstance(RestClient.getURLBASE() + "course/?api_key=special-key");
 		
-		RestClient.LoadRestClient(MainActivity.this);
-		Log.d("Treinamento", RestClient.getURLBASE() + "course/?api_key=special-key");
-		RestClient.getInstance().getJson(RestClient.getURLBASE() + "course/?api_key=special-key", callback);
-		
-		
+		getSupportFragmentManager().beginTransaction().replace(R.id.container, go).commit();
+				
 	}
 	
 	HttpResponseCallback callback = new HttpResponseCallback() {
@@ -77,7 +81,7 @@ public class MainActivity extends Activity {
 		@Override
 		public void onSucess(JSONObject json) {
 			// TODO Auto-generated method stub
-			progress.dismiss();
+//			progress.dismiss();
 			Log.d("Treinamento", json.toString());
 			
 			
@@ -86,7 +90,7 @@ public class MainActivity extends Activity {
 		@Override
 		public void onError(String erro) {
 			// TODO Auto-generated method stub
-			progress.dismiss();
+//			progress.dismiss();
 			Log.d("Treinamento", erro);
 			
 		}

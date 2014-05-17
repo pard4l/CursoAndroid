@@ -41,7 +41,7 @@ public class RestClient {
 	HttpURLConnection urlConnection = null;
 
 	private static String URLBASE = "http://treinamentos.mobi/api/v1/";
-	public static String URLMEDIA = "http://treinamentos.mobi/media/";
+	public static String URLMEDIA = "http://treinamentos.mobi";
 
 	public RestClient(Context _cont) {
 		cont = _cont;
@@ -215,7 +215,7 @@ public class RestClient {
 				JSONObject js = new JSONObject();
 				js.put("list", new JSONArray(responseStrBuilder.toString()));
 				json = js;
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 			return json;
 		} catch (Exception e) {
