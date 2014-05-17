@@ -1,0 +1,42 @@
+{
+	"database":
+	{
+		"package":"treinamentos.mobi.db",
+		"classes_prefix":"treinamento",
+		"version":1
+	},
+	"tables":[
+		{
+	        "table_name":"Person",
+			"fields":[
+				{
+		            "name":"id",
+					"type":"integer",
+					"is_primary_key":true,
+					"is_id":true
+	        	},
+				{
+					"name":"firstName",
+					"type":"text",
+					"is_index":true
+				},
+				{
+					"name":"lastName",
+					"type":"text",
+                    "is_index":true
+				},
+				{
+					"name":"birthday",
+					"type":"integer"
+				},
+				{
+					"name":"gender",
+					"type":"integer"
+				},
+				{ "name": "phone",
+				"type":"text"
+				
+			]
+		} 
+    ]
+}
