@@ -18,4 +18,8 @@ build/
 .gradle/
 Android/Eclipse/Banese/.apt_generated
 *.apt_generated
+TreinamentoApp/bin/
+TreinamentoApp/gen/
+TreinamentoApp/build/
+
 
