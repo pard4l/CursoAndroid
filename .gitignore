@@ -1,0 +1,21 @@
+TreinamentoApp/gen/treinamento/mobi/app/R.java
+
+#Android
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+build/
+.gradle/
+Android/Eclipse/Banese/.apt_generated
+*.apt_generated
+
