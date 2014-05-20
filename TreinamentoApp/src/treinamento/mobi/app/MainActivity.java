@@ -2,6 +2,8 @@ package treinamento.mobi.app;
 
 import org.json.JSONObject;
 
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+
 import treinamento.mobi.rest.RestClient;
 import treinamento.mobi.rest.RestClient.HttpResponseCallback;
 import treinamento.mobi.ui.fragments.CoursesListFragment;
@@ -29,6 +31,17 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		SlidingMenu menu = new SlidingMenu(this);
+        menu.setMode(SlidingMenu.LEFT);
+        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+        menu.setShadowWidthRes(R.dimen.shadow_width);
+        menu.setShadowDrawable(R.drawable.shadow);
+        menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+        menu.setFadeDegree(0.35f);
+        menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+        menu.setMenu(R.layout.menu_app);
+		
 
 //		if (savedInstanceState == null) {
 //			getFragmentManager().beginTransaction()
@@ -96,6 +109,32 @@ public class MainActivity extends FragmentActivity {
 		}
 	};
 	
+	public void onCoursesSelected(){
+		
+		Fragment go = CoursesListFragment
+				.newInstance(RestClient.getURLBASE() + "course/?api_key=special-key");
+		
+		getSupportFragmentManager().beginTransaction().replace(R.id.container, go).commit();
+		
+	}
+	
+	public void onTurmaSelected(){
+		
+		Log.d("Treinamento", "Turma selecionada");
+		
+	}
+	
+	public void onAboutSelected(){
+		
+		Log.d("Treinamento", "About selecionada");
+		
+	}
+	
+	public void onTeachersSelected(){
+		
+		Log.d("Treinamento", "Teachers selecionada");
+		
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

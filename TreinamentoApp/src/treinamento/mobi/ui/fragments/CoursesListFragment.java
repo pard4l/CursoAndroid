@@ -13,6 +13,7 @@ import treinamento.mobi.utils.ImageLoader;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +58,6 @@ public class CoursesListFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		url = getArguments().getString("URL");
 		
-		Log.d("Treinamentos", url);
 
 	}
 
@@ -71,7 +71,40 @@ public class CoursesListFragment extends Fragment {
 		
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-	           Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+	           //Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+	        	
+	        	try {
+					JSONObject courseSelected = array.getJSONObject(position);
+					
+					FragmentTransaction ft = getActivity()
+							.getSupportFragmentManager().beginTransaction();
+	 
+					Fragment course;
+					try {
+						course = CourseFragment.newInstance(array
+								.getJSONObject(position));
+						
+//						ft.setCustomAnimations(R.anim.slide_in_left,
+//								R.anim.slide_out_right);
+						
+						ft.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+						ft.replace(R.id.container, course, "course_selected");
+						ft.addToBackStack("course_list");
+						ft.commit();
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+					
+//					/////
+//					Fragment course = new CourseFragment().newInstance(courseSelected);
+//					
+//					getActivity().getSupportFragmentManager()
+//						.beginTransaction().replace(R.id.container, course)
+//						.addToBackStack("course_list").commit();
+					
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 	        }
 	    });
 		
@@ -93,10 +126,9 @@ public class CoursesListFragment extends Fragment {
 		@Override
 		public void onSucess(JSONObject json) {
 			
-			
-			
 			try {
-				gridView.setAdapter(new ImageAdapter(getActivity(), json.getJSONArray("list")));
+				array = json.getJSONArray("list");
+				gridView.setAdapter(new ImageAdapter(getActivity(), array));
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
