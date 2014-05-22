@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import treinamento.mobi.app.MainActivity;
 import treinamento.mobi.app.R;
 import treinamento.mobi.rest.RestClient;
 import treinamento.mobi.rest.RestClient.HttpResponseCallback;
@@ -40,8 +41,6 @@ public class CoursesListFragment extends Fragment {
 	public static Fragment newInstance(String url) {
 
 		// Referenciar uma instancia do Fragment para transporte de argumentos
-
-		Log.d("Treinamento", "URL: " + url);
 		
 		Fragment f = new CoursesListFragment();
 		Bundle args = new Bundle();
@@ -128,7 +127,14 @@ public class CoursesListFragment extends Fragment {
 			
 			try {
 				array = json.getJSONArray("list");
+				
+				((MainActivity)getActivity()).setArrayCourses(array);
+				
+				getActivity().invalidateOptionsMenu();
+				
 				gridView.setAdapter(new ImageAdapter(getActivity(), array));
+				
+				
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -198,7 +204,7 @@ public class CoursesListFragment extends Fragment {
 			ImageLoader imgLoader = new ImageLoader(getActivity()
 					.getApplicationContext());
 			
-			int loader = R.drawable.ic_launcher;
+			int loader = R.drawable.logo;
 			String image_url = null;
 			try {
 

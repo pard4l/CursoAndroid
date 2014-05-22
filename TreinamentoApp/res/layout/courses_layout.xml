@@ -12,6 +12,7 @@
             android:horizontalSpacing="10dp"
             android:numColumns="2"
             android:stretchMode="columnWidth"
+            android:listSelector="@drawable/selector_listview"
             android:verticalSpacing="10dp" >
         </GridView>
 

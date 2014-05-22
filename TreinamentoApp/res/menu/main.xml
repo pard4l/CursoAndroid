@@ -5,7 +5,14 @@
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        android:showAsAction="always"
+        android:title="Cursos"
+        android:icon="@drawable/ic_launcher">
+        	<menu>
+        	    <item android:id="@+id/item"
+        	        android:title="Submenu"/>
+        	    
+        	</menu>
+        </item>
 
 </menu>
