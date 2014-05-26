@@ -93,32 +93,23 @@ public class MainActivity extends FragmentActivity {
 
 		// Get GCM registration id
 		final String regId = GCMRegistrar.getRegistrationId(this);
-
-		Log.d("Treinamento", "IDDD" + regId);
+		Log.d("Treinamento", "ID " + regId);
 		
 		// Check if regid already presents
 		if (regId.equals("")) {
-			// Registration is not present, register now with GCM
 			GCMRegistrar.register(this, SENDER_ID);
-			Log.d("Treinamento", "IDDD222" + GCMRegistrar.getRegistrationId(this));
 		} else {
 			// Device is already registered on GCM
 			if (GCMRegistrar.isRegisteredOnServer(this)) {
-				// Skips registration.
 				Toast.makeText(getApplicationContext(),
 						"Already registered with GCM", Toast.LENGTH_LONG)
 						.show();
 			} else {
-				// Try to register again, but not in the UI thread.
-				// It's also necessary to cancel the thread onDestroy(),
-				// hence the use of AsyncTask instead of a raw thread.
 				final Context context = this;
 				mRegisterTask = new AsyncTask<Void, Void, Void>() {
 
 					@Override
 					protected Void doInBackground(Void... params) {
-						// Register on our server
-						// On server creates a new user
 //						ServerUtilities.register(context, "Treinamento",
 //								"flaviano@treinamentos.mobi", regId);
 						return null;
@@ -149,52 +140,6 @@ public class MainActivity extends FragmentActivity {
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setTitle("Treinamento");
 		getActionBar().setIcon(R.drawable.ic_drawer);
-
-		// if (savedInstanceState == null) {
-		// getFragmentManager().beginTransaction()
-		// .replace(R.id.container, new CoursesListFragment()).commit();
-		// }
-		//
-		// ContentResolver cp = getContentResolver();
-		// ContentValues values = new ContentValues();
-		// values.put(treinamentoContent.Person.Columns.FIRST_NAME.getName(),
-		// "Pardal");
-		// values.put(treinamentoContent.Person.Columns.BIRTHDAY.getName(), 29);
-		// values.put(treinamentoContent.Person.Columns.LAST_NAME.getName(),
-		// "Pardal");
-		// values.put(treinamentoContent.Person.Columns.PHONE.getName(),
-		// "99999999");
-		//
-		// cp.insert(treinamentoContent.Person.CONTENT_URI, values);
-		//
-		//
-		// Cursor c = cp.query(treinamentoContent.Person.CONTENT_URI, null ,
-		// null, null, null);
-		// c.moveToFirst();
-		//
-		// while (!c.isAfterLast()){
-		//
-		// Log.d("Treinamento",
-		// c.getString(treinamentoContent.Person.Columns.ID.getIndex()));
-		// Log.d("Treinamento",
-		// c.getString(treinamentoContent.Person.Columns.FIRST_NAME.getIndex()));
-		// Log.d("Treinamento",
-		// c.getInt(treinamentoContent.Person.Columns.BIRTHDAY.getIndex()) +
-		// "");
-		//
-		// c.moveToNext();
-		//
-		// }
-
-		// String where = "id = ?" ;
-		// String val[] = { "1" };
-
-		// cp.delete(treinamentoContent.Person.CONTENT_URI, where, val);
-		// http://treinamentos.mobi/api/v1/course/?api_key=special-key
-
-		// progress = new ProgressDialog(MainActivity.this);
-		// progress.setMessage("Carregando");
-		// progress.show();
 
 		Fragment go = CoursesListFragment.newInstance(RestClient.getURLBASE()
 				+ "course/?api_key=special-key");
@@ -258,7 +203,6 @@ public class MainActivity extends FragmentActivity {
 					try {
 						String nameCourse = arrayCourses.getJSONObject(i)
 								.getString("name");
-						//Log.d("Treinamento", nameCourse);
 						sbCursos.add(nameCourse);
 					} catch (JSONException e) {
 						e.printStackTrace();

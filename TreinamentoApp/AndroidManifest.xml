@@ -31,9 +31,6 @@
 
     <!-- Permission to vibrate -->
     <uses-permission android:name="android.permission.VIBRATE" />
-    
-    
-    <!-- API Key AIzaSyAGqsdMq8u2NlQMEQ-JOfTrgZ8gCexrvxI -->
 
     <application
         android:allowBackup="true"
@@ -64,7 +61,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <!-- Receives the registration id. -->
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-
+                
                 <category android:name="treinamento.mobi.app" />
             </intent-filter>
         </receiver>
