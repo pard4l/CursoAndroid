@@ -14,6 +14,7 @@ import treinamento.mobi.rest.RestClient;
 import treinamento.mobi.ui.fragments.AboutFragment;
 import treinamento.mobi.ui.fragments.CourseFragment;
 import treinamento.mobi.ui.fragments.CoursesListFragment;
+import treinamento.mobi.ui.fragments.TeachersListFragment;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -41,22 +42,21 @@ public class MainActivity extends FragmentActivity {
 	SlidingMenu menuApp;
 
 	private JSONArray arrayCourses;
-	
+
 	private ConnectionDetector cd;
 	AlertDialogManager alert = new AlertDialogManager();
-	
-	// Asyntask 
+
+	// Asyntask
 	AsyncTask<Void, Void, Void> mRegisterTask;
 
-	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
 		GCMRegistrar.register(this, SENDER_ID);
-		
+
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,19 +71,16 @@ public class MainActivity extends FragmentActivity {
 			// stop executing code by return
 			return;
 		}
-		
-		if (getIntent().getExtras() != null){
-			if (getIntent().getExtras().getBoolean("vimDoNotificacao", false)){
-				
+
+		if (getIntent().getExtras() != null) {
+			if (getIntent().getExtras().getBoolean("vimDoNotificacao", false)) {
 				alert.showAlertDialog(MainActivity.this,
-						"PUSH NOTIFICAÇÃO EXEMPLO",
-						"Vim da Notificação", false);
+						"PUSH NOTIFICA√á√ÉO EXEMPLO", "Vim da Notifica√ß√£o", false);
 				// stop executing code by return
 				return;
-				
 			}
 		}
-		
+
 		// Make sure the device has the proper dependencies.
 		GCMRegistrar.checkDevice(this);
 
@@ -94,7 +91,7 @@ public class MainActivity extends FragmentActivity {
 		// Get GCM registration id
 		final String regId = GCMRegistrar.getRegistrationId(this);
 		Log.d("Treinamento", "ID " + regId);
-		
+
 		// Check if regid already presents
 		if (regId.equals("")) {
 			GCMRegistrar.register(this, SENDER_ID);
@@ -110,8 +107,8 @@ public class MainActivity extends FragmentActivity {
 
 					@Override
 					protected Void doInBackground(Void... params) {
-//						ServerUtilities.register(context, "Treinamento",
-//								"flaviano@treinamentos.mobi", regId);
+						// ServerUtilities.register(context, "Treinamento",
+						// "flaviano@treinamentos.mobi", regId);
 						return null;
 					}
 
@@ -184,7 +181,14 @@ public class MainActivity extends FragmentActivity {
 
 	public void onTeachersSelected() {
 
+		System.gc();
+		
 		Log.d("Treinamento", "Teachers selecionada");
+		Fragment teacher = TeachersListFragment.newInstance(RestClient
+				.getURLBASE() + "person/?api_key=special-key");
+		
+		getSupportFragmentManager().beginTransaction().replace(R.id.container, teacher)
+			.addToBackStack("list_teacher").commit();
 		menuApp.toggle();
 
 	}
@@ -251,13 +255,14 @@ public class MainActivity extends FragmentActivity {
 			return true;
 		}
 
-		if (arrayCourses != null){
+		if (arrayCourses != null) {
 			for (int i = 0; i < arrayCourses.length(); i++) {
 				try {
 					if (item.getTitle()
 							.toString()
 							.equalsIgnoreCase(
-									arrayCourses.getJSONObject(i).getString("name"))) {
+									arrayCourses.getJSONObject(i).getString(
+											"name"))) {
 						selectCourse(i);
 						return true;
 					}

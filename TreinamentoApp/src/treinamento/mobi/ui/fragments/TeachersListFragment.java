@@ -62,8 +62,8 @@ public class TeachersListFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		// Inflar o Layout que será utilizado
-		content = inflater.inflate(R.layout.courses_layout, null);
+		// Inflar o Layout que ser√° utilizado
+		content = inflater.inflate(R.layout.teachers_layout, null);
 		gridView = (GridView) content.findViewById(R.id.gridview);
 		
 		
@@ -72,22 +72,22 @@ public class TeachersListFragment extends Fragment {
 	           //Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
 	        	
 	        	try {
-					JSONObject courseSelected = array.getJSONObject(position);
+					JSONObject teacherSelected = array.getJSONObject(position);
 					
 					FragmentTransaction ft = getActivity()
 							.getSupportFragmentManager().beginTransaction();
 	 
-					Fragment course;
+					Fragment teachFragment;
 					try {
-						course = CourseFragment.newInstance(array
+						teachFragment = TeacherFragment.newInstance(array
 								.getJSONObject(position));
 						
 //						ft.setCustomAnimations(R.anim.slide_in_left,
 //								R.anim.slide_out_right);
 						
 						ft.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-						ft.replace(R.id.container, course, "course_selected");
-						ft.addToBackStack("course_list");
+						ft.replace(R.id.container, teachFragment, "teacher_selected");
+						ft.addToBackStack("teacher_list");
 						ft.commit();
 					} catch (JSONException e) {
 						e.printStackTrace();
@@ -115,16 +115,21 @@ public class TeachersListFragment extends Fragment {
 
 		// Buscar dados Rest/DB/XML etc..
 		RestClient.LoadRestClient(getActivity());
-		RestClient.getInstance().getJson(url, callBackCourses);
+		
+		Log.d("Treinamento", url);
+		
+		RestClient.getInstance().getJson(url, callBackTeachers);
 
 	}
 
-	public HttpResponseCallback callBackCourses = new HttpResponseCallback() {
+	public HttpResponseCallback callBackTeachers = new HttpResponseCallback() {
 
 		@Override
 		public void onSucess(JSONObject json) {
-			
 			try {
+				
+				Log.d("Treinamento", json.toString());
+				
 				array = json.getJSONArray("list");
 				gridView.setAdapter(new ImageAdapter(getActivity(), array));
 			} catch (JSONException e) {
@@ -145,22 +150,22 @@ public class TeachersListFragment extends Fragment {
 	public class ImageAdapter extends BaseAdapter {
 
 		private Context mContext;
-		private JSONArray courses;
+		private JSONArray teachers;
 
 		public ImageAdapter(Context context, JSONArray array) {
 			super(context, array);
 			mContext = context;
-			courses = array;
+			teachers = array;
 		}
 
 		public int getCount() {
-			return courses.length();
+			return teachers.length();
 		}
 
 		public JSONObject getItem(int position) {
 			
 			try {
-				return (JSONObject) courses.get(position);
+				return (JSONObject) teachers.get(position);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -177,38 +182,28 @@ public class TeachersListFragment extends Fragment {
 			View row = convertView;
 			if (row == null) {
 			   LayoutInflater inflater = (getActivity()).getLayoutInflater();
-			   row = inflater.inflate(R.layout.row_course, parent, false);
+			   row = inflater.inflate(R.layout.row_teacher, parent, false);
 			}
 			
-			ImageView imageView = (ImageView) row.findViewById(R.id.imageCourse);
-			TextView textCourse = (TextView) row.findViewById(R.id.nameCourse);
+			ImageView imageView = (ImageView) row.findViewById(R.id.img_teacher);
+			TextView textName = (TextView) row.findViewById(R.id.txt_name);
+			TextView textCourse = (TextView) row.findViewById(R.id.txt_course);
 			
-//			if (convertView == null) { // if it's not recycled, initialize some
-//										// attributes
-//				imageView = new ImageView(mContext);
-//				imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-//				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//				imageView.setPadding(8, 8, 8, 8);
-//			} else {
-//				imageView = (ImageView) convertView;
-//			}
-
 			ImageLoader imgLoader = new ImageLoader(getActivity()
 					.getApplicationContext());
 			
 			int loader = R.drawable.logo;
 			String image_url = null;
 			try {
-
-				textCourse.setText(getItem(position).getString("name"));
+				textName.setText(getItem(position).getString("name"));
+				textCourse.setText(getItem(position).getString("knowledge"));
 				image_url = RestClient.URLMEDIA
-						+ getItem(position).getString("logo");
+						+ getItem(position).getString("photo");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			imgLoader.DisplayImage(image_url, loader, imageView);
 
-			// imageView.setImageResource(courses.[position]);
 			return row;
 		}
 
