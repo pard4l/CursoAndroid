@@ -1,16 +1,15 @@
 package treinamento.mobi.ui.fragments;
 
 import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import treinamento.mobi.app.MainActivity;
 import treinamento.mobi.app.R;
 import treinamento.mobi.rest.RestClient;
 import treinamento.mobi.rest.RestClient.HttpResponseCallback;
 import treinamento.mobi.utils.ImageLoader;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+@SuppressLint("NewApi")
 public class CoursesListFragment extends Fragment {
 	JSONArray array;
 
@@ -63,7 +63,7 @@ public class CoursesListFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		// Inflar o Layout que ser‡ utilizado
+		// Inflar o Layout que serï¿½ utilizado
 		content = inflater.inflate(R.layout.courses_layout, null);
 		gridView = (GridView) content.findViewById(R.id.gridview);
 		
@@ -127,13 +127,13 @@ public class CoursesListFragment extends Fragment {
 			
 			try {
 				array = json.getJSONArray("list");
-				
-				((MainActivity)getActivity()).setArrayCourses(array);
-				
-				getActivity().invalidateOptionsMenu();
-				
-				gridView.setAdapter(new ImageAdapter(getActivity(), array));
-				
+				if (array != null){
+					((MainActivity)getActivity()).setArrayCourses(array);
+					
+					getActivity().invalidateOptionsMenu();
+					
+					gridView.setAdapter(new ImageAdapter(getActivity(), array));
+				}
 				
 			} catch (JSONException e) {
 				e.printStackTrace();

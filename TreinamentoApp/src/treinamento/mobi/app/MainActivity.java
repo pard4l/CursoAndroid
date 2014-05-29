@@ -11,9 +11,12 @@ import treinamento.mobi.push.AlertDialogManager;
 import treinamento.mobi.push.ConnectionDetector;
 import treinamento.mobi.push.WakeLocker;
 import treinamento.mobi.rest.RestClient;
+import treinamento.mobi.rest.RestClient.HttpResponseCallback;
+import treinamento.mobi.singleton.TreinamentoSingleton;
 import treinamento.mobi.ui.fragments.AboutFragment;
 import treinamento.mobi.ui.fragments.CourseFragment;
 import treinamento.mobi.ui.fragments.CoursesListFragment;
+import treinamento.mobi.ui.fragments.ScheduleListFragment;
 import treinamento.mobi.ui.fragments.TeachersListFragment;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -57,6 +60,27 @@ public class MainActivity extends FragmentActivity {
 
 	}
 
+	HttpResponseCallback callBackTeacher = new HttpResponseCallback() {
+		
+		@Override
+		public void onSucess(JSONObject json) {
+			
+			try {
+				TreinamentoSingleton.getINSTANCE().setJsonTeachers(json.getJSONArray("list"));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		@Override
+		public void onError(String erro) {
+			// TODO Auto-generated method stub
+			
+		}
+	};
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -80,6 +104,9 @@ public class MainActivity extends FragmentActivity {
 				return;
 			}
 		}
+		
+		RestClient.LoadRestClient(this);
+		RestClient.getInstance().getJson(RestClient.getURLBASE() + "person/", callBackTeacher);
 
 		// Make sure the device has the proper dependencies.
 		GCMRegistrar.checkDevice(this);
@@ -143,10 +170,11 @@ public class MainActivity extends FragmentActivity {
 
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.container, go).commit();
-
 	}
 
 	public void onCoursesSelected() {
+
+		System.gc();
 
 		Fragment go = CoursesListFragment.newInstance(RestClient.getURLBASE()
 				+ "course/?api_key=special-key");
@@ -154,18 +182,26 @@ public class MainActivity extends FragmentActivity {
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.container, go).commit();
 
+		menuApp.toggle();
+
 	}
 
 	public void onTurmaSelected() {
 
 		Log.d("Treinamento", "Turma selecionada");
+
+		Fragment schedule = ScheduleListFragment.newInstance(RestClient
+				.getURLBASE() + "schedule/?api_key=special-key");
+
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.container, schedule).commit();
+
 		menuApp.toggle();
 
 	}
 
 	public void onAboutSelected() {
 
-		Log.d("Treinamento", "About selecionada");
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
 		Fragment about;
@@ -182,13 +218,13 @@ public class MainActivity extends FragmentActivity {
 	public void onTeachersSelected() {
 
 		System.gc();
-		
-		Log.d("Treinamento", "Teachers selecionada");
+
 		Fragment teacher = TeachersListFragment.newInstance(RestClient
 				.getURLBASE() + "person/?api_key=special-key");
-		
-		getSupportFragmentManager().beginTransaction().replace(R.id.container, teacher)
-			.addToBackStack("list_teacher").commit();
+
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.container, teacher)
+				.addToBackStack("list_teacher").commit();
 		menuApp.toggle();
 
 	}
@@ -336,5 +372,5 @@ public class MainActivity extends FragmentActivity {
 		}
 		super.onDestroy();
 	}
-
+	
 }

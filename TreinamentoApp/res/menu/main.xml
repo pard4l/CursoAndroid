@@ -7,7 +7,7 @@
         android:orderInCategory="100"
         android:showAsAction="always"
         android:title="Cursos"
-        android:icon="@drawable/ic_launcher">
+        android:icon="@drawable/logo">
         	<menu>
         	    <item android:id="@+id/item"
         	        android:title="Submenu"/>

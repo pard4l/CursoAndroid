@@ -43,7 +43,7 @@
         <item name="android:background">@drawable/ab_transparent_treinamento</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Treinamento</item>
     </style>
-
+    
     <style name="PopupMenu.Treinamento" parent="@android:style/Widget.Holo.Light.ListPopupWindow">
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_treinamento</item>	
     </style>
@@ -54,9 +54,6 @@
 
     <style name="ActionBarTabStyle.Treinamento" parent="@android:style/Widget.Holo.Light.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_treinamento</item>
-        
-
-        
     </style>
 
     <style name="DropDownNav.Treinamento" parent="@android:style/Widget.Holo.Light.Spinner">
